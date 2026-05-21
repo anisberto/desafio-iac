@@ -5,7 +5,8 @@ FROM eclipse-temurin:21-jdk-alpine AS build
 
 WORKDIR /app
 
-COPY Desafio-IaC/mvnw Desafio-IaC/.mvn/ ./
+COPY Desafio-IaC/mvnw ./
+COPY Desafio-IaC/.mvn .mvn
 COPY Desafio-IaC/pom.xml ./
 RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
 

@@ -1,0 +1,6 @@
+**/.git
+**/.idea
+**/target
+**/.DS_Store
+FASE-01/terraform/.terraform
+FASE-01/terraform/*.tfstate*
