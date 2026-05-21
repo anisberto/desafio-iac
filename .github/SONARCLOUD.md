@@ -2,8 +2,6 @@
 
 ## Configuracao
 
-O projeto esta integrado ao [SonarCloud](https://sonarcloud.io) com:
-
 | Propriedade | Valor |
 |-------------|-------|
 | Organization | `anisberto` |
@@ -12,33 +10,41 @@ O projeto esta integrado ao [SonarCloud](https://sonarcloud.io) com:
 
 ## Secret no GitHub
 
-O token **nao fica no codigo**. Configure no repositorio:
+O token **nao fica no codigo**. Configure em:
 
-1. GitHub → **Settings** → **Secrets and variables** → **Actions**
-2. **New repository secret**
-3. Name: `SONAR_TOKEN`
-4. Value: token gerado em [SonarCloud > My Account > Security](https://sonarcloud.io/account/security)
+**GitHub → Settings → Secrets and variables → Actions → SONAR_TOKEN**
 
-Ou via CLI:
+Gere o token em [SonarCloud > My Account > Security](https://sonarcloud.io/account/security).
 
-```bash
-gh secret set SONAR_TOKEN --repo anisberto/desafio-iac
+## Erro "Project not found"
+
+Esse erro ocorre quando o projeto ainda nao existe no SonarCloud. O pipeline executa automaticamente o script:
+
+`.github/scripts/ensure-sonar-project.sh`
+
+Ele cria o projeto antes da analise Maven.
+
+### Se a organization estiver errada
+
+A organization no SonarCloud pode ser diferente do usuario GitHub. Se o script falhar, ele lista as organizations disponiveis no log do CI.
+
+Ajuste nos workflows:
+
+```yaml
+env:
+  SONAR_ORGANIZATION: sua-org-sonarcloud
+  SONAR_PROJECT_KEY: anisberto_desafio-iac
 ```
 
-## Importar projeto no SonarCloud
+Ou crie manualmente em [sonarcloud.io](https://sonarcloud.io):
 
-Se ainda nao importou:
-
-1. Acesse [sonarcloud.io](https://sonarcloud.io)
-2. **+** → **Analyze new project**
-3. Selecione `anisberto/desafio-iac`
-4. Use a organization `anisberto` e project key `anisberto_desafio-iac`
+1. **+** → **Analyze new project**
+2. Selecione `anisberto/desafio-iac`
+3. Confirme organization e project key
 
 ## Pipelines
 
-SonarCloud roda nos workflows:
-
 - `.github/workflows/fase-01-ci.yml`
-- `.github/workflows/fase-02-cd.yml` (job build-and-test)
+- `.github/workflows/fase-02-cd.yml`
 
-Comando executado: `./mvnw verify sonar:sonar`
+Comando: `./mvnw verify sonar:sonar`

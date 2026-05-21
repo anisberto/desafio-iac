@@ -10,6 +10,8 @@ env:
   JAVA_VERSION: '21'
   IMAGE_NAME: desafio-iac
   REGISTRY: ghcr.io
+  SONAR_ORGANIZATION: anisberto
+  SONAR_PROJECT_KEY: anisberto_desafio-iac
 
 jobs:
   build-and-test:
@@ -40,11 +42,22 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
+      - name: Ensure SonarCloud project exists
+        working-directory: .
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_ORGANIZATION: ${{ env.SONAR_ORGANIZATION }}
+          SONAR_PROJECT_KEY: ${{ env.SONAR_PROJECT_KEY }}
+        run: bash .github/scripts/ensure-sonar-project.sh
+
       - name: Build, test and analyze (SonarCloud)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./mvnw verify sonar:sonar --batch-mode
+        run: >
+          ./mvnw verify sonar:sonar --batch-mode
+          -Dsonar.organization=${{ env.SONAR_ORGANIZATION }}
+          -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }}
 
   docker-build-push:
     name: Docker Build & Push
