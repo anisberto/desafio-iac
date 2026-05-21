@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: Desafio-IaC
+  thymeleaf:
+    check-template-location: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+server:
+  port: 8080

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: desafio-iac
+  labels:
+    app: desafio-iac
+    fase: "02"
