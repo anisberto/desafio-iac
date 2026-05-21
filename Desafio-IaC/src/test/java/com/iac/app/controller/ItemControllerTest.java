@@ -27,10 +27,9 @@ class ItemControllerTest {
 	private MockMvc mockMvc;
 
 	@Autowired
-	private ObjectMapper objectMapper;
-
-	@Autowired
 	private InMemoryItemRepository repository;
+
+	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	@BeforeEach
 	void setUp() {
