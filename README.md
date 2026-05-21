@@ -57,8 +57,19 @@ cd Desafio-IaC
 
 | Workflow | Gatilho | Função |
 |----------|---------|--------|
-| `fase-01-ci.yml` | Push/PR → `main`, `develop` | Build, testes, validação Terraform |
-| `fase-02-cd.yml` | Push → `main` | Build Docker, scan, push GHCR, deploy |
+| `fase-01-ci.yml` | Push/PR → `main`, `develop` | Build, testes, SonarCloud, validação Terraform |
+| `fase-02-cd.yml` | Push → `main` | Build, SonarCloud, Docker, scan, push GHCR, deploy |
+
+## SonarCloud
+
+Análise de qualidade integrada nos pipelines CI/CD.
+
+| Propriedade | Valor |
+|-------------|-------|
+| Organization | `anisberto` |
+| Project Key | `anisberto_desafio-iac` |
+
+Configure o secret `SONAR_TOKEN` no GitHub (veja [.github/SONARCLOUD.md](.github/SONARCLOUD.md)).
 
 ## Deploy rápido (Fase 2)
 
