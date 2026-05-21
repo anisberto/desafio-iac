@@ -52,14 +52,23 @@ jobs:
           SONAR_PROJECT_KEY: ${{ env.SONAR_PROJECT_KEY }}
         run: bash .github/scripts/ensure-sonar-project.sh
 
-      - name: Build, test and analyze (SonarCloud)
+      - name: Build, test and generate coverage
+        run: ./mvnw clean verify --batch-mode
+
+      - name: Verify JaCoCo report
+        run: |
+          test -f target/site/jacoco/jacoco.xml
+          echo "JaCoCo report gerado com sucesso"
+
+      - name: Analyze with SonarCloud
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >
-          ./mvnw verify sonar:sonar --batch-mode
+          ./mvnw sonar:sonar --batch-mode
           -Dsonar.organization=${{ env.SONAR_ORGANIZATION }}
           -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }}
+          -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
